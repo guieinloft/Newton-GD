@@ -1,4 +1,22 @@
 from sympy import *
+import numpy as np
+import matplotlib.pyplot as plt
+
+def show_fg(x0, y0, f):
+    lam_f = lambdify([x, y], f, modules=['numpy'])
+    
+    f0 = lam_f(x0, y0)
+
+    xv = np.arange(float(x0-1), float(x0+1), 0.1)
+    yv = np.arange(float(y0-1), float(y0+1), 0.1)
+    xv, yv = np.meshgrid(xv, yv)
+    fv = lam_f(xv, yv)
+
+    fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+    f_gr = ax.plot_surface(xv, yv, fv, cmap='winter')
+    fp_gr = ax.plot([x0], [y0], [f0], markerfacecolor='g', markeredgecolor='g', marker='o', markersize=5, alpha=0.5, zorder=100)
+    plt.show()
+
 
 def gd_it(x0, y0, g_x, g_y, gamma):
     x1 = x0 - gamma * g_x.subs(x, x0).subs(y, y0)
@@ -9,8 +27,10 @@ def gd_it(x0, y0, g_x, g_y, gamma):
 
 def gd(func, x0, y0, gamma, err):
     i = 0
+    printf = '%d: %.' + str(err) + 'f, %.' + str(err) + 'f'
     while i < 100:
-        print(i, round(x0, err), round(y0, err))
+        print(printf % (i, x0, y0))
+        show_fg(x0, y0, func)
         
         x1, y1 = gd_it(x0, y0, diff(func, x), diff(func, y), gamma)
         
