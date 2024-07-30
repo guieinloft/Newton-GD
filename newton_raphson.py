@@ -26,6 +26,7 @@ def show_fg(x0, y0, f, g):
 
 
 def nr_it(x0, y0, f, g):
+    x, y = symbols('x y')
     fx = diff(f, x).subs([(x, x0), (y, y0)])
     fy = diff(f, y).subs([(x, x0), (y, y0)])
     gx = diff(g, x).subs([(x, x0), (y, y0)])
@@ -56,12 +57,15 @@ def nr(x0, y0, f, g, err):
 
     return x1, y1
 
+def main():
+    x, y = symbols('x y')
+    f = x**2 + x*y - 10
+    g = y + 3*x*y**2 - 57
+    x0 = 1.5
+    y0 = 3.5
+    err = 5
 
-x, y = symbols('x y')
-f = x**2 + x*y - 10
-g = y + 3*x*y**2 - 57
-x0 = 1.5
-y0 = 3.5
-err = 5
+    print(nr(x0, y0, f, g, err))
 
-print(nr(x0, y0, f, g, err))
+if __name__ == '__main__':
+    main()
